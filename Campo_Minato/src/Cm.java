@@ -30,7 +30,7 @@ public class Cm {
             int riga = celle/this.campo[0].length;
             int colonna = celle % this.campo[0].length;
 
-            this.campo[riga][colonna] = "afghanistan";
+            this.campo[riga][colonna] = "-1";
         }
     }
 
