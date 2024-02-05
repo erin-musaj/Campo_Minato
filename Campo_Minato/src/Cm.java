@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Cm {
 
-    String[][] campo;
+    int[][] campo;
     String[][] gioco;
 
     public Cm(int righe, int colonne){
@@ -14,7 +14,7 @@ public class Cm {
     public void inizializzaCampo(){
         for (int i = 0; i < campo.length; i++) {
             for (int j = 0; j < campo[i].length; j++) {
-                campo[i][j] = " ";
+                campo[i][j] = -1;
             }
         }
     }
@@ -34,23 +34,43 @@ public class Cm {
             int riga = celle/this.campo[0].length;
             int colonna = celle % this.campo[0].length;
 
-            this.campo[riga][colonna] = "-1";
+            this.campo[riga][colonna] = -2;
         }
     }
 
-    public boolean eseguiClick(int riga, int colonna){
-        if(this.campo[riga][colonna].equals("-1")){
+    public boolean eseguiClick(int y, int x){
+        if(this.campo[y][x]==-2){
             return false;
         } else {
-            Queue<Integer> coda = new LinkedList<>();
-            coda.add(riga*this.campo[0].length + colonna);
+            LinkedList<Integer> visitati = new LinkedList<Integer>();
+            LinkedList<Integer> coda = new LinkedList<>();
+            this.campo[y][x] = 0;
+            coda.add(y*this.campo[0].length + x);
+            int cx = x;
+            int cy = y;
             while(coda.isEmpty()){
-                int a = 0;
-                if(riga!=0 && (campo[coda.peek()/this.campo[0].length][colonna]==0)){
-                    coda.add(riga-1*this.campo[0].length + colonna);
+                int cella = coda.pop();
+                cx = cella/this.campo[0].length;
+                cy = cella % this.campo[0].length;
+                if(this.campo[cy][cx]==-1){
+                    for(int i = -1; i<=1; i++){
+                        for (int j = -1; j <= 1 ; j++) {
+                            try{
+                                if(!visitati.contains(cy*this.campo[0].length + cx) && this.campo[cy+i][cx+j]!=-2){
+                                    coda.add(cy*this.campo[0].length + cx);
+                                    if(this.campo[cy][cx] == -1){
+                                        this.campo[cy][cx] = 0;
+                                    } else if (this.campo[cy][cx] < 9 && this.campo[cy][cx]> 17){
+                                        this.campo[cy][cx] -= 9;
+                                    }
+                                }
+                            } catch (Exception ignored){}
+                        }
+                    }
                 }
             }
         }
+        return true;
     }
 
 }
